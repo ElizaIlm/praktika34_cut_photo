@@ -22,6 +22,26 @@ namespace Ilmasheva_pr34
             InitializeComponent();
         }
 
+        private BitmapImage BitmapToBitmapImage(BitmapSource bitmapSource)
+        {
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                encoder.Save(stream);
+
+                BitmapImage image = new BitmapImage();
+
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = new MemoryStream(stream.ToArray());
+                image.EndInit();
+
+                return image;
+            }
+        }
+
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -118,6 +138,46 @@ namespace Ilmasheva_pr34
 
             ((UIElement)sender).ReleaseMouseCapture();
         }
+
+        private void BtnCrop_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainImage.Source == null)
+                return;
+
+            BitmapSource source = (BitmapSource)MainImage.Source;
+
+            int cropX = (int)Canvas.GetLeft(CropFrame);
+            int cropY = (int)Canvas.GetTop(CropFrame);
+
+            int cropWidth = (int)CropFrame.Width;
+            int cropHeight = (int)CropFrame.Height;
+
+            if (cropX + cropWidth > source.PixelWidth)
+                cropWidth = source.PixelWidth - cropX;
+
+            if (cropY + cropHeight > source.PixelHeight)
+                cropHeight = source.PixelHeight - cropY;
+
+            if (cropWidth <= 0 || cropHeight <= 0)
+                return;
+
+            CroppedBitmap cropped = new CroppedBitmap(
+                source,
+                new Int32Rect(cropX, cropY, cropWidth, cropHeight));
+
+            MainImage.Source = cropped;
+
+            MainImage.Width = cropped.PixelWidth;
+            MainImage.Height = cropped.PixelHeight;
+
+            ImageCanvas.Width = cropped.PixelWidth;
+            ImageCanvas.Height = cropped.PixelHeight;
+
+            originalImage = BitmapToBitmapImage(cropped);
+
+            ResetFrame();
+        }
+
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
