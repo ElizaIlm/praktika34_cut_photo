@@ -5,8 +5,99 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ilmasheva_pr34"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Обрезка фото" Height="450" Width="800">
+    <Grid Margin="15">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="White" CornerRadius="15" Padding="15" Margin="0,0,15,0">
+            <StackPanel>
+                <TextBlock Text="Обрезка фото"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Margin="0,0,0,25"
+                           Foreground="#222"/>
+                
+                <Button x:Name="BtnLoad"
+                        Click="BtnLoad_Click"
+                        Content="Загрузить фото"
+                        Height="45"
+                        Margin="0,0,0,15"
+                        FontSize="16"
+                        Background="#4F46E5"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+
+                <Button x:Name="BtnCrop"
+                        Click="BtnCrop_Click"
+                        Content="Обрезать"
+                        Height="45"
+                        Margin="0,0,0,15"
+                        FontSize="16"
+                        Background="#10B981"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+
+                <Button x:Name="BtnReset"
+                        Click="BtnReset_Click"
+                        Content="Сбросить"
+                        Height="45"
+                        Margin="0,0,0,15"
+                        FontSize="16"
+                        Background="#F59E0B"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+
+                <Button x:Name="BtnSave"
+                        Click="BtnSave_Click"
+                        Content="Сохранить"
+                        Height="45"
+                        FontSize="16"
+                        Background="#EF4444"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Background="White" CornerRadius="15" Padding="10">
+            <Grid>
+                <Border Background="#DDD" CornerRadius="10" ClipToBounds="True">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <Canvas x:Name="ImageCanvas">
+                            <Image x:Name="MainImage" Stretch="None"/>
+                            <Border x:Name="CropFrame"
+                                BorderBrush="Red"
+                                BorderThickness="3"
+                                Background="#22FF0000"
+                                Canvas.Left="0"
+                                Canvas.Top="0"
+                                MouseLeftButtonDown="CropFrame_MouseLeftButtonDown"
+                                MouseMove="CropFrame_MouseMove"
+                                MouseLeftButtonUp="CropFrame_MouseLeftButtonUp">
+                                <Grid>
+                                    <Rectangle Width="15"
+                                        Height="15"
+                                        Fill="White"
+                                        Stroke="Black"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Cursor="SizeNWSE"
+                                        MouseLeftButtonDown="Resize_MouseLeftButtonDown"
+                                        MouseMove="Resize_MouseMove"
+                                        MouseLeftButtonUp="Resize_MouseLeftButtonUp"/>
+                                </Grid>
+                            </Border>
+                        </Canvas>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
